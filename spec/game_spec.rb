@@ -65,11 +65,30 @@ describe Game do
 
       before do
         game_over_column.push_piece(piece_green, column)
-        3.times { game_over_column.push_piece(piece_red, column) }
+        4.times { game_over_column.push_piece(piece_red, column) }
       end
 
       it 'is game over' do
         expect(game_over_column).to be_game_over
+      end
+    end
+
+    context 'when 4 same color pieces are next to each other in a row' do
+      subject(:game_over_row) { described_class.new }
+      let(:piece_red) { double('piece', color: 'red') }
+      let(:piece_green) { double('piece', color: 'green') }
+
+      before do
+        game_over_row.push_piece(piece_green, 0)
+        game_over_row.push_piece(piece_red, 1)
+        game_over_row.push_piece(piece_green, 2)
+        game_over_row.push_piece(piece_green, 3)
+        game_over_row.push_piece(piece_green, 4)
+        game_over_row.push_piece(piece_green, 5)
+      end
+
+      it 'is game over' do
+        expect(game_over_row).to be_game_over
       end
     end
   end

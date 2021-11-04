@@ -8,7 +8,8 @@ class Game
   end
 
   def game_over?
-    return check_columns_game_over
+    return check_columns_game_over || check_rows_game_over
+
   end
 
   private
@@ -19,14 +20,31 @@ class Game
   end
 
   def check_column(col)
+    color = nil
     color_count = 1
-    @board[col].each_index do |i|
-      cur_piece = @board[col][i]
-      next_piece = @board[col][i+1]
-      return false unless next_piece
-      color_count = (cur_piece.color == next_piece.color ? color_count + 1 : 1)
+    @board[col].each do |piece|      
+      color_count = (color == piece.color ? color_count + 1 : 1)
+      color = piece.color
       return true if color_count == 4
-      return false if color_count < (5 - i) 
     end
+    return false
+  end
+
+  def check_rows_game_over
+    6.times { |row| return true if check_row(row) }
+    return false
+  end
+
+  def check_row(row)
+    color = nil
+    color_count = 1
+    7.times do |col|
+      piece = @board[col][row]
+      return false unless piece
+      color_count = (color == piece.color ? color_count + 1 : 1)
+      color = piece.color
+      return true if color_count == 4
+    end
+    return false
   end
 end
