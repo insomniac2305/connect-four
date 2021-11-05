@@ -8,12 +8,15 @@ class Game
   end
 
   def push_piece(piece, column)
-    @board[column].push(piece) unless @board[column].size >= 6
+    @board[column].push(piece) unless @board[column].size >= @@BOARD_HEIGHT
   end
 
   def game_over?
     return check_columns_game_over || check_rows_game_over || check_diagonals_game_over
+  end
 
+  def board_full?
+    return @board.all? {|col| col.size >= @@BOARD_HEIGHT}
   end
 
   private

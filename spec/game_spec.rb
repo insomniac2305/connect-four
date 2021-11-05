@@ -198,4 +198,52 @@ describe Game do
       end
     end
   end
+
+  describe '#board_full?' do
+    context 'when the game board is empty' do
+      subject(:game_empty) { described_class.new }
+
+      it 'is not full' do
+        expect(game_empty).not_to be_board_full
+      end
+    end
+
+    context 'when the game board is partially filled' do
+      subject(:game_partially_filled) { described_class.new }
+      let(:piece_red) { double('piece', color: 'red') }
+      let(:piece_green) { double('piece', color: 'green') }
+
+      before do
+        game_partially_filled.push_piece(piece_green, 0)
+        game_partially_filled.push_piece(piece_red, 0)        
+        game_partially_filled.push_piece(piece_green, 1)
+        game_partially_filled.push_piece(piece_red, 1)
+        game_partially_filled.push_piece(piece_green, 2)
+        game_partially_filled.push_piece(piece_red, 3)
+        game_partially_filled.push_piece(piece_green, 2)
+        game_partially_filled.push_piece(piece_red, 3)
+        game_partially_filled.push_piece(piece_green, 5)
+      end
+
+      it 'is not full' do
+        expect(game_partially_filled).not_to be_board_full
+      end
+    end
+
+    context 'when the game board is full' do
+      subject(:game_full) { described_class.new }
+      let(:piece_red) { double('piece', color: 'red') }
+      let(:piece_green) { double('piece', color: 'green') }
+
+      before do
+        for col in 0..6 do
+          6.times { game_full.push_piece(piece_green, col)}
+        end
+      end
+
+      it 'is full' do
+        expect(game_full).to be_board_full
+      end
+    end
+  end
 end
