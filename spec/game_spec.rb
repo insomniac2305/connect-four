@@ -57,6 +57,14 @@ describe Game do
   end
 
   describe '#game_over?' do
+    context 'when game board is empty' do
+      subject(:game_empty) { described_class.new }
+
+      it 'is not game over' do
+        expect(game_empty).not_to be_game_over
+      end
+    end
+
     context 'when 4 same color pieces are on top of each other in a column' do
       subject(:game_over_column) { described_class.new }
       let(:piece_red) { double('piece', color: 'red') }
@@ -89,6 +97,104 @@ describe Game do
 
       it 'is game over' do
         expect(game_over_row).to be_game_over
+      end
+    end
+
+    context 'when 4 same color pieces are next to each other in a top-down diagonal' do
+      subject(:game_over_top_down_diagonal) { described_class.new }
+      let(:piece_red) { double('piece', color: 'red') }
+      let(:piece_green) { double('piece', color: 'green') }
+
+      before do
+        game_over_top_down_diagonal.push_piece(piece_green, 2)
+        game_over_top_down_diagonal.push_piece(piece_green, 2)
+        game_over_top_down_diagonal.push_piece(piece_red, 2)
+        game_over_top_down_diagonal.push_piece(piece_green, 2)
+
+        game_over_top_down_diagonal.push_piece(piece_green, 3)
+        game_over_top_down_diagonal.push_piece(piece_red, 3)
+        game_over_top_down_diagonal.push_piece(piece_green, 3)
+        
+        game_over_top_down_diagonal.push_piece(piece_red, 4)
+        game_over_top_down_diagonal.push_piece(piece_green, 4)
+        
+        game_over_top_down_diagonal.push_piece(piece_green, 5)
+      end
+
+      it 'is game over' do
+        expect(game_over_top_down_diagonal).to be_game_over
+      end
+    end
+
+    context 'when 4 same color pieces are next to each other in a bottom-up diagonal' do
+      subject(:game_over_bottom_up_diagonal) { described_class.new }
+      let(:piece_red) { double('piece', color: 'red') }
+      let(:piece_green) { double('piece', color: 'green') }
+
+      before do
+        game_over_bottom_up_diagonal.push_piece(piece_red, 2)
+        game_over_bottom_up_diagonal.push_piece(piece_green, 2)
+        game_over_bottom_up_diagonal.push_piece(piece_green, 2)
+
+        game_over_bottom_up_diagonal.push_piece(piece_green, 3)
+        game_over_bottom_up_diagonal.push_piece(piece_red, 3)
+        game_over_bottom_up_diagonal.push_piece(piece_red, 3)
+        
+        game_over_bottom_up_diagonal.push_piece(piece_green, 4)
+        game_over_bottom_up_diagonal.push_piece(piece_red, 4)
+        game_over_bottom_up_diagonal.push_piece(piece_red, 4)
+
+        game_over_bottom_up_diagonal.push_piece(piece_green, 5)
+        game_over_bottom_up_diagonal.push_piece(piece_green, 5)
+        game_over_bottom_up_diagonal.push_piece(piece_green, 5)
+        game_over_bottom_up_diagonal.push_piece(piece_red, 5)
+      end
+
+      it 'is game over' do
+        expect(game_over_bottom_up_diagonal).to be_game_over
+      end
+    end
+
+    context 'when there are no 4 same color pieces arranged in a row, column or diagonal' do
+      subject(:game_not_over) { described_class.new }
+      let(:piece_red) { double('piece', color: 'red') }
+      let(:piece_green) { double('piece', color: 'green') }
+
+      before do
+        game_not_over.push_piece(piece_green, 0)
+        game_not_over.push_piece(piece_red, 0)
+
+        game_not_over.push_piece(piece_red, 2)
+        game_not_over.push_piece(piece_green, 2)
+        game_not_over.push_piece(piece_green, 2)
+        game_not_over.push_piece(piece_red, 2)
+        game_not_over.push_piece(piece_green, 2)
+
+        game_not_over.push_piece(piece_green, 3)
+        game_not_over.push_piece(piece_red, 3)
+        game_not_over.push_piece(piece_red, 3)
+        game_not_over.push_piece(piece_green, 3)
+        game_not_over.push_piece(piece_red, 3)
+        game_not_over.push_piece(piece_red, 3)
+        
+        game_not_over.push_piece(piece_green, 4)
+        game_not_over.push_piece(piece_red, 4)
+        game_not_over.push_piece(piece_red, 4)
+        game_not_over.push_piece(piece_red, 4)
+        game_not_over.push_piece(piece_green, 4)
+
+        game_not_over.push_piece(piece_green, 5)
+        game_not_over.push_piece(piece_green, 5)
+        game_not_over.push_piece(piece_green, 5)
+        
+        game_not_over.push_piece(piece_red, 6)
+        game_not_over.push_piece(piece_red, 6)
+        game_not_over.push_piece(piece_red, 6)
+        game_not_over.push_piece(piece_green, 6)
+      end
+
+      it 'is not game over' do
+        expect(game_not_over).not_to be_game_over
       end
     end
   end
