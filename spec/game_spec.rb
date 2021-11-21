@@ -246,4 +246,44 @@ describe Game do
       end
     end
   end
+
+  describe '#get_input' do
+    subject(:game_input) { described_class.new }
+
+    context 'when input is valid' do
+      let(:input) { '2' }
+      
+      before do
+        allow(game_input).to receive(:gets).and_return(input)
+      end
+
+      it 'returns input value as integer' do
+        result = game_input.get_input
+        expect(result).to eq(input.to_i)
+      end
+    end
+
+    context 'when first input is not a number, second is out of range and third input is valid' do
+      let(:input_nan) { 'abc' }
+      let(:input_oor) { '10' }
+      let(:input_valid) { '3' }
+
+      before do
+        allow(game_input).to receive(:puts).with('Wrong input!')
+      end
+      
+      it 'asks for input thrice' do
+        allow(game_input).to receive(:gets).and_return(input_nan, input_oor, input_valid)
+        expect(game_input).to receive(:gets).thrice
+        game_input.get_input
+      end
+
+      it 'returns third input value as integer' do
+        allow(game_input).to receive(:gets).and_return(input_nan, input_oor, input_valid)
+        result = game_input.get_input
+        expect(result).to eq(input_valid.to_i)
+      end
+    end
+
+  end
 end

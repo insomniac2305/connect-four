@@ -19,6 +19,15 @@ class Game
     return @board.all? {|col| col.size >= @@BOARD_HEIGHT}
   end
 
+  def get_input
+    input = gets.to_i
+    until input.between?(1, 7) do
+      puts 'Wrong input!'
+      input = gets.to_i
+    end
+    return input
+  end
+
   private
 
   def check_columns_game_over    
