@@ -11,6 +11,11 @@ describe Game do
         has_seven_empty_columns = (game_board.size == 7 && game_board.all?(&:empty?))
         expect(has_seven_empty_columns).to be true
       end
+
+      it 'has the active color set to green' do
+        active_color = game_new.instance_variable_get(:@active_color)
+        expect(active_color).to eq 'green'
+      end
     end
   end
 
@@ -284,6 +289,17 @@ describe Game do
         expect(result).to eq(input_valid.to_i)
       end
     end
+  end
 
+  describe '#switch_active_color' do
+    subject(:game_color) { described_class.new }
+
+    context 'when color was green (new game)' do
+      it 'is now red' do
+        game_color.switch_active_color
+        active_color = game_color.instance_variable_get(:@active_color)
+        expect(active_color).to eq 'red'
+      end
+    end
   end
 end

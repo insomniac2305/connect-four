@@ -1,3 +1,5 @@
+require_relative 'piece'
+
 class Game
 
   @@BOARD_WIDTH = 7
@@ -5,6 +7,7 @@ class Game
 
   def initialize
     @board = Array.new(@@BOARD_WIDTH) { Array.new() }
+    @active_color = 'green'
   end
 
   def push_piece(piece, column)
@@ -26,6 +29,35 @@ class Game
       input = gets.to_i
     end
     return input
+  end
+
+  def play_round(color)
+    print 'Please choose a column [1-7] to drop your piece into: '
+    column = get_input - 1
+    piece = Piece.new(color)
+    push_piece(piece, column)
+  end
+
+  def switch_active_color
+    @active_color = (@active_color == 'green' ? 'red' : 'green')
+  end
+
+  def play
+    puts 'Welcome to connect four, where you have to place four of your pieces next to each other horizontally, vertically or diagonally in a 7x6 board'
+    puts "Player #{@active_color.capitalize} will start!"
+    print_board
+    until board_full?
+      play_round(@active_color)
+      print_board
+      break if game_over?
+      switch_active_color
+    end
+    board_full? ? puts "It's a tie!" : puts "The winner is Player #{@active_color}!"
+    end
+  end
+
+  def print_board
+    puts @board.to_s
   end
 
   private
