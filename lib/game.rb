@@ -32,7 +32,7 @@ class Game
   end
 
   def play_round(color)
-    print 'Please choose a column [1-7] to drop your piece into: '
+    print "Player #{color.capitalize}, please choose a column [1-7] to drop your piece into: "
     column = get_input - 1
     piece = Piece.new(color)
     push_piece(piece, column)
@@ -52,7 +52,10 @@ class Game
       break if game_over?
       switch_active_color
     end
-    board_full? ? puts "It's a tie!" : puts "The winner is Player #{@active_color}!"
+    if board_full? 
+      puts "It's a tie!"
+    else 
+      puts "The winner is player #{@active_color.capitalize}!"
     end
   end
 
