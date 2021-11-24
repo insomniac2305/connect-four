@@ -19,12 +19,16 @@ class Game
   end
 
   def board_full?
-    return @board.all? {|col| col.size >= @@BOARD_HEIGHT}
+    return @board.all? {|col| col.compact.size >= @@BOARD_HEIGHT}
+  end
+
+  def column_full?(col)
+    @board[col].compact.size >= @@BOARD_HEIGHT
   end
 
   def get_input
     input = gets.to_i
-    until input.between?(1, 7) do
+    until input.between?(1, 7) && !column_full?(input-1) do
       puts 'Wrong input!'
       input = gets.to_i
     end
@@ -60,7 +64,17 @@ class Game
   end
 
   def print_board
-    puts @board.to_s
+    5.downto(0) do |i|
+      print "|"
+      0.upto(6) do |n|
+        print @board[n][i].nil? ? "   |" : " #{@board[n][i]} |"
+      end
+      puts
+    end
+    1.upto(7) do |n|
+      print "  #{n} "
+    end
+    puts
   end
 
   private
